@@ -1,0 +1,34 @@
+{
+  "name": "static-site",
+  "description": "A simple static site generator",
+  "version": "0.0.0",
+  "author": "Paul C Pederson <paul.c.pederson@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/paulcpederson/static-site/issues"
+  },
+  "devDependencies": {
+    "standard": "*",
+    "tap-spec": "^3.0.0",
+    "tape": "^4.0.0"
+  },
+  "homepage": "https://github.com/paulcpederson/static-site",
+  "keywords": [
+    "build",
+    "html",
+    "site",
+    "static"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paulcpederson/static-site.git"
+  },
+  "scripts": {
+    "test": "standard && tape test/*.js | tap-spec"
+  },
+  "dependencies": {
+    "glob": "^5.0.10",
+    "object-assign": "^3.0.0"
+  }
+}
