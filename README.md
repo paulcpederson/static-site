@@ -19,8 +19,9 @@ Static Site has both a Node API, as well as a CLI.
 ```
 var staticSite = require('static-site')
 
-staticSite(options, function (err, sitemap) {
-  console.log(sitemap) // complete sitemap of what pages were rendered
+staticSite(options, function (err, site, stats) {
+  console.log(site)  // array of pages built
+  console.log(stats) // {pages: 14, start: 1434175863750, end: 1434175863770, duration: 20}
 })
 ```
 
@@ -31,8 +32,6 @@ static-site --help
 
 -b, --build             Name of build folder
 -s, --source            Name of source folder
--d, --data              Name of data folder
--l, --layouts           Name of layouts folder
 -i, --ignore            Array of glob patterns to ignore
 -f, --files             File extensions to match
 -c, --clean             Remove files generated from previous builds
@@ -47,10 +46,8 @@ The options for Static Site are below (with their default values).
 | -------------- | ------------------------------- | ----------- |
 | build          | `'build'`                       | path to build folder |
 | source         | `'source'`                      | path to source folder |
-| data           | `'data'`                        | path to data folder |
-| layouts        | `'layouts'`                     | path to layouts folder |
 | ignore         | `['assets/**']`                 | array of globs to ignore |
-| files          | `['html', 'md', 'markdown']` | array of file extentions to parse |
+| files          | `['html', 'md', 'markdown']`    | array of file extentions to parse |
 | clean          | `false`                         | remove all files in build folder before building |
 | templateEngine | `'hogan'`                       | which template engine to use from [consolidate.js](https://github.com/tj/consolidate.js#supported-template-engines) |
 
