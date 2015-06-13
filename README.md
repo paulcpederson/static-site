@@ -50,7 +50,7 @@ The options for Static Site are below (with their default values).
 | data           | `'data'`                        | path to data folder |
 | layouts        | `'layouts'`                     | path to layouts folder |
 | ignore         | `['assets/**']`                 | array of globs to ignore |
-| files          | `['.html', '.md', '.markdown']` | array of file extentions to parse |
+| files          | `['html', 'md', 'markdown']` | array of file extentions to parse |
 | clean          | `false`                         | remove all files in build folder before building |
 | templateEngine | `'hogan'`                       | which template engine to use from [consolidate.js](https://github.com/tj/consolidate.js#supported-template-engines) |
 
@@ -103,20 +103,43 @@ By default, static-site uses [hogan.js](http://twitter.github.io/hogan.js/) temp
 
 To use a different template engine, just set the `templateEngine` option to the engine you want to use. For example, to use swig, just set `templateEngine: 'swig'`.
 
+Using a specific layout on a page is as easy as pointing to the layout in your front matter:
+
+```
+---
+layout: layouts/main.hbs
+---
+```
+
+Inside your template you will have access to the front matter of each page, plus a few other properties of the page that Static Site gives you for free:
+
+- `url` - the URL of the page
+- `root` - relative path to the site's root
+- `dest` - filepath to built file
+- `file` - filepath to source file
+- `isMarkdown` - whether the source file was markdown
+- `content` - the actual text content of the post
+
+The `root` property is especially useful for things like stylesheets:
+
+```
+<link rel="stylesheet" href="{{root}}/css/screen.css">
+```
+
 ## Data
 
-JSON, YML, and JavaScript are all valid data formats. To access data from a page, make sure you have a data file in the data folder like `posts.json` and then state which data you need in the `data` front matter field:
+JSON, YML, and JavaScript are all valid data formats. Say you have a file named `posts.json` in a folder called `data`. To add that data to a page, just add the path to the file:
 
 ```
 ---
 title: 'Title of Page'
 description: 'Description of Page'
 data:
-  - posts.json
+  posts: data/posts.json
 ---
 ```
 
-In your page, you can get this data by using the word `posts`. The variable name is always the file name without its extension.
+In your page, you can get this data by using:
 
 ```
 {{data.posts}}
@@ -127,28 +150,26 @@ Yaml and JSON data files are simply static data, but JavaScript files can be any
 ```
 category: Bears
 data:
-  - bears.js
+  bears: data/bears.js
 ```
 
-If you wanted to add an array of all the posts in the 'Bears' category, you can create a `bears.js` file in the data folder that adds the data to each page. Data files are called with the site (array of pages), the particular page (object), and `done`:
+If you wanted to add an array of all the posts in the 'Bears' category, you can create a `bears.js` file that adds the data to each page. Data files are called with the site (array of pages), the particular page (object), and an error-first callback:
 
 ```js
-module.exports = function (site, page, done) {
+module.exports = function (site, page, cb) {
   var bears = site.filter(function (p) {
     return p.category === 'Bears'
   })
-  page.data.bears = bears
-  done()
+  cb(null, bears)
 }
 ```
 
 Now by adding `bears.js` to your page's metadata, you can use `{{data.bears}}` in your page.
 
-Or, if you wanted to add a 'next' and 'previous' link to each post, you could create a data file with the following:
+Inside data files, you can also add data directly to the page's data object, instead of returning the data in the callback. For example, if you wanted to add a 'next' and 'previous' link to each post, you could create a data file with the following:
 
 ```js
 module.exports = function (site, page, done) {
-
   var posts = site.filter(function (p) {
     return p.url.includes('/posts/')
   })
@@ -167,9 +188,9 @@ Now anything in the `posts` folder will have a `{{data.next}}` and `{{data.prev}
 
 > There are 4 million static site generators out there, why build another one?
 
-Totally valid point. I began this journey by looking through almost every static site generator on npm. It seemed so stupid to reinvent a wheel that seemingly everybody has invented. After trying a lot of them out, and weighing my options, I still felt that they were lacking. Not in features, but in *focus*. Most of them lock you into a particular way of working. They are immense, opinionated structures that try to do everything for you. They include a cli that generates scaffolds, a server, a file watcher, and all kinds of other features.
+Totally valid point. I began this journey by looking through almost every static site generator on npm (there are hundreds, but many are undocumented or empty). It seemed so stupid to reinvent a wheel that seemingly everybody has invented. After trying a lot of them out, and weighing my options, I still felt that they were lacking. Not in features, but in *focus*. Most of them lock you into a particular way of working. They are immense, opinionated structures that try to do everything for you. They include a cli that generates scaffolds, a server, a file watcher, and all kinds of other features.
 
-Static-site isn't a magic bullet. It doesn't do everything for you. It doesn't have a scaffolding command, or a server, or a cute name. Instead, it just does one thing: take a folder of files and data and compile `html` from it (even that is done in a pretty naive way...). In my mind, if you can't cover the capabilities of a module in a basic `README`, it is probably too big. Keep the thing small, focused, and flexible. Do just enough for the developer, but don't try to do everything.
+Static-site isn't a magic bullet. It doesn't do everything for you. It doesn't have a scaffolding command, or a server, or a cute name. And it probably won't scale up to hundreds and thousands of pages. Instead, it just does one thing: take a folder of files and data and turn it into HTML. It's up to you to figure out how to preprocess your Sass, or bundle JavaScript, or run a development server. It's up to you to watch files and figure out a task runner. Static Site is for developers working on small DIY projects. Hopefully it's useful to you.
 
 ## Contributing
 
