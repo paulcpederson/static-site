@@ -18,6 +18,7 @@
     "site",
     "static"
   ],
+  "bin": "bin/static-site.js",
   "license": "ISC",
   "main": "index.js",
   "repository": {
@@ -29,6 +30,8 @@
   },
   "dependencies": {
     "glob": "^5.0.10",
-    "object-assign": "^3.0.0"
+    "gray-matter": "^2.0.0",
+    "object-assign": "^3.0.0",
+    "yargs": "^3.10.0"
   }
 }
