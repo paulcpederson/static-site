@@ -94,6 +94,9 @@ arrayOfThings:
 ---
 ```
 
+Both `{{title}}` and `{{description}}` are now available to your templates as strings, while `{{arrayOfThings}}` is available as an array.
+Static Site uses [gray-matter](https://www.npmjs.com/package/gray-matter) for parsing front matter which allows for quite a bit of flexibility. If you want you can write your front matter as JSON or even CoffeeScript. To change how your front matter is interpretted, just add the language [after the firt delimiter](https://www.npmjs.com/package/gray-matter#options-lang).
+
 ## Templates
 
 By default, static-site uses [hogan.js](http://twitter.github.io/hogan.js/) templates, but you can use whatever template-engine your heart desires. Static Site uses [consolidate.js](https://github.com/tj/consolidate.js) to render templates, so you can use any template engine supported by consolidate (which is [a lot](https://github.com/tj/consolidate.js#supported-template-engines)).
