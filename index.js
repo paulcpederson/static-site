@@ -1,30 +1,38 @@
 var path = require('path')
-var glob = require('glob')
 var assign = require('object-assign')
 var defaults = require('./lib/defaults')
+var source = require('./lib/source')
 var frontmatter = require('./lib/frontmatter')
 var data = require('./lib/data')
 var layout = require('./lib/layout')
 var build = require('./lib/build')
 
-function parse (files, options, cb) {
-  var t0 = Date.now()
-  var site = files.map(function (file) {return frontmatter(file, options, cb)})
-      .map(function (page) {return data(page, options, cb)})
-      .map(function (page) {return layout(page, options, cb)})
-  return build(site, options, t0, cb)
-}
-
 function static (options, cb) {
   var opts = assign({}, defaults, options)
-  var sourcePath = path.join(process.cwd(), opts.source)
-  var fileExtensions = '*.{' + opts.files.join(',') + '}'
-  var globPattern = path.join(sourcePath, '**', fileExtensions)
-
-  glob(globPattern, {}, function (err, files) {
-    if (err) { return cb(err) }
-    return parse(files, options, cb)
-  })
+  var context = {
+    sourcePath: path.join(process.cwd(), opts.source),
+    start: Date.now(),
+    options: opts
+  }
+  source.call(context)
+    .then(frontmatter.bind(context))
+    .then(data.bind(context))
+    .then(layout.bind(context))
+    .then(build.bind(context))
+    .then(function (pages) {
+      console.log(pages)
+      var t2 = Date.now()
+      var stats = {
+        pages: pages.length,
+        start: context.start,
+        end: t2,
+        duration: t2 - context.start
+      }
+      return cb(null, pages, stats)
+    })
+    .catch(function (err) {
+      cb(err)
+    })
 }
 
 module.exports = static
