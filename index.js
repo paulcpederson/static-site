@@ -4,6 +4,7 @@ var defaults = require('./lib/defaults')
 var source = require('./lib/source')
 var frontmatter = require('./lib/frontmatter')
 var data = require('./lib/data')
+var helpers = require('./lib/data')
 var template = require('./lib/template')
 var build = require('./lib/build')
 
@@ -17,6 +18,7 @@ function static (options, cb) {
   source.call(context)
     .then(frontmatter.bind(context))
     .then(data.bind(context))
+    .then(helpers.bind(context))
     .then(template.bind(context))
     .then(build.bind(context))
     .then(function (pages) {
