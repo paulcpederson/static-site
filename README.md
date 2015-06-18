@@ -237,15 +237,36 @@ Assuming you have that saved to a file named `render.js`, you can now run `stati
 
 ### Using Swig
 
-Static site sets up swig partials and layouts for you. Using a specific layout on a page is as easy as pointing to the layout in your front matter:
+Static site sets up swig partials and templates for you out of the box. Using a specific template on a page is as easy as pointing to it  in your front matter:
 
 ```
 ---
-layout: layouts/post.html
+template: templates/post.html
 ---
 ```
 
-Now that page will use the post layout, which could look something like this:
+Now that page will use the post template, which could look something like this:
+
+```html
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{title}}</title>
+</head>
+<body>
+  {% include "header.html" %}
+  {% block content %}{% endblock %}
+  {% include "footer.html" %}
+</body>
+</html>
+```
+
+The content of the page will be inserted into the content block in the template.
+
+Templates can also [extend other templates](http://paularmstrong.github.io/swig/docs/#inheritance) and [include partials](http://paularmstrong.github.io/swig/docs/tags/#include), so you could have a main layout template you use for every page, and a dedicated post tmeplate which extends the main layout.
+
+> `templates/main.html`
 
 ```
 <!doctype html>
@@ -262,28 +283,7 @@ Now that page will use the post layout, which could look something like this:
 </html>
 ```
 
-The content of the page will be inserted into the content block in the layout.
-
-Layouts can also [extend other layouts](http://paularmstrong.github.io/swig/docs/#inheritance) and [include partials](http://paularmstrong.github.io/swig/docs/tags/#include), so you could have a main layout you use for every page, and a dedicated post layout which extends the main layout.
-
-> `layouts/main.html`
-
-```
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>{{title}}</title>
-</head>
-<body>
-  {% include "header.html" %}
-  {% block content %}{% endblock %}
-  {% include "footer.html" %}
-</body>
-</html>
-```
-
-> `layouts/post.html`
+> `templates/post.html`
 
 ```
 {% extends 'layout.html' %}
