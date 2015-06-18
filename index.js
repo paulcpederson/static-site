@@ -8,7 +8,7 @@ var helpers = require('./lib/data')
 var template = require('./lib/template')
 var build = require('./lib/build')
 
-function static (options, cb) {
+function staticSite (options, cb) {
   var opts = assign({}, defaults, options)
   var context = {
     sourcePath: path.join(process.cwd(), opts.source),
@@ -37,4 +37,4 @@ function static (options, cb) {
     })
 }
 
-module.exports = static
+module.exports = staticSite

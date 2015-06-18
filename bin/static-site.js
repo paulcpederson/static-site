@@ -2,9 +2,7 @@
 var staticSite = require('../')
 var defaults = require('../lib/defaults')
 var color = require('cli-color')
-var path = require('path')
 var util = require('util')
-var pkg = require(path.join(process.cwd(), 'package.json'))
 var yargs = require('yargs')
   .usage('Usage: $0 [options]')
   .options({
