@@ -33,6 +33,7 @@ static-site --help
 -b, --build             Name of build folder
 -s, --source            Name of source folder
 -i, --ignore            Array of glob patterns to ignore
+-h, --helpers           Array of helper files to run
 -f, --files             File extensions to match
 -c, --clean             Remove files generated from previous builds
 -t, --templateEngine    Template engine to use for each page
@@ -47,6 +48,7 @@ The options for Static Site are below (with their default values).
 | build          | `'build'`                       | path to build folder |
 | source         | `'source'`                      | path to source folder |
 | ignore         | `['assets/**']`                 | array of globs to ignore |
+| helpers          | `[]`                          | array of helper files to run |
 | files          | `['html', 'md', 'markdown']`    | array of file extentions to parse |
 | clean          | `false`                         | remove all files in build folder before building |
 | templateEngine | `'hogan'`                       | which template engine to use from [consolidate.js](https://github.com/tj/consolidate.js#supported-template-engines) |
@@ -78,7 +80,12 @@ Now you can use `npm run build` to run static site with the [default options](#o
   }
 ```
 
-Now when you build, static site will use the Jade template engine and build to a folder called `dist`.
+Now when you build, static site will use the Jade template engine and build to a folder called `dist`. Static Site has four basic building blocks:
+
+- [Front Matter](#front-matter) — data stored at the top of each page
+- [Data Files](#data) — data stored in separate files (Yaml, JSON, JavaScript)
+- [Helpers](#helpers) — helper functions that manipulate the site
+- [Templates](#templates) — templates for rendering page data
 
 ## Front Matter
 
@@ -96,6 +103,121 @@ arrayOfThings:
 
 Both `{{title}}` and `{{description}}` are now available to your templates as strings, while `{{arrayOfThings}}` is available as an array.
 Static Site uses [gray-matter](https://www.npmjs.com/package/gray-matter) for parsing front matter which allows for quite a bit of flexibility. If you want you can write your front matter as JSON or even CoffeeScript. To change how your front matter is interpretted, just add the language [after the firt delimiter](https://www.npmjs.com/package/gray-matter#options-lang).
+
+## Data
+
+JSON, YML, and JavaScript are all valid data formats. Say you have a file named `posts.json` in a folder called `data`. To add that data to a page, just add the path to the file:
+
+```
+---
+title: 'Title of Page'
+description: 'Description of Page'
+data:
+  posts: data/posts.json
+---
+```
+
+In your page, you can get this data by using:
+
+```
+{{data.posts}}
+```
+
+JavaScript data files should export a single function that will be called with the page and a callback function. In this way you can add asynchronous data do a page. Say for instance, you wanted to add a list of your GitHub repos everytime you build the site. First, you would add the data file to your page:
+
+```
+---
+title: 'Title of Page'
+description: 'Description of Page'
+data:
+  repos: data/repos.js
+---
+```
+
+Then in `data/repos.js` you would use something along these lines:
+
+```js
+var request = require('request')
+var url = 'https://api.github.com/users/paulcpederson/repos'
+
+module.exports = function (page, cb) {
+  request(url, function (error, response, body) {
+    if (error) {
+      return cb(error)
+    }
+    return cb(null, body)
+  })
+}
+```
+
+Now the response of the request is available as `{{data.repos}}`.
+
+## Helpers
+
+Helpers add the ability to manipulate pages at a site level. Helpers are just JavaScript files which export a single function. This function will be called with the site array and an error-first callback. You can do anything you want to the site, and then send the new site to the callback. Helpers are run after data and before templates.
+
+For an example, say you had the following front matter:
+
+```
+category: Bears
+```
+
+If you wanted to add an array of all the posts in the 'Bears' category, you can create a `helpers/bears.js` file that adds those posts as an array to the page. Helpers are called with the site (array of pages) and an error-first callback:
+
+```js
+module.exports = function (site, cb) {
+  var bears = site.filter(function (p) {
+    return p.category === 'Bears'
+  })
+  site = site.map(function (page) {
+    page.bears = bears
+    return page
+  })
+  cb(null, site)
+}
+```
+
+Then, to run the helper when you build, just use the `-h` flag and pass a list of all the helpers. For the above example, you can run:
+
+```
+static-site -h helpers/bears.js
+```
+
+If you had a lot of helpers, you can put them in a folder and glob it:
+
+```
+static-site -h helpers/*.js
+```
+
+As another example, if you want to add a `next` and `prev` link to all the blog posts, you could create a helper at `helpers/next-prev.js` that looks like this:
+
+```js
+function isPost (page) {
+  return page.url.includes('/posts/')
+}
+
+module.exports = function (site, page, done) {
+  var posts = site.filter(isPost)
+  site = site.map(function (page) {
+    if (isPost(page)) {
+      var index = posts.indexOf(page)
+      page.next = posts[index + 1] || posts[0]
+      page.prev = posts[index - 1] || posts[posts.length - 1]
+    }
+  })
+  cb(null, site)
+}
+```
+
+Now anything in the `posts` folder will have a `{{next}}` and `{{prev}}` key holding the next or previous post.
+
+# Why
+
+> There are 4 million static site generators out there, why build another one?
+
+Totally valid point. I began this journey by looking through almost every static site generator on npm (there are hundreds, but many are undocumented or empty). It seemed so stupid to reinvent a wheel that seemingly everybody has invented. After trying a lot of them out, and weighing my options, I still felt that they were lacking. Not in features, but in *focus*. Most of them lock you into a particular way of working. They are immense, opinionated structures that try to do everything for you. They include a cli that generates scaffolds, a server, a file watcher, and all kinds of other features.
+
+Static-site isn't a magic bullet. It doesn't do everything for you. It doesn't have a scaffolding command, or a server, or a cute name. And it probably won't scale up to hundreds and thousands of pages. Instead, it just does one thing: take a folder of files and data and turn it into HTML. It's up to you to figure out how to preprocess your Sass, or bundle JavaScript, or run a development server. It's up to you to watch files and figure out a task runner. Static Site is for developers working on small DIY projects. Hopefully it's useful to you.
 
 ## Templates
 
@@ -125,72 +247,6 @@ The `root` property is especially useful for things like stylesheets:
 ```
 <link rel="stylesheet" href="{{root}}/css/screen.css">
 ```
-
-## Data
-
-JSON, YML, and JavaScript are all valid data formats. Say you have a file named `posts.json` in a folder called `data`. To add that data to a page, just add the path to the file:
-
-```
----
-title: 'Title of Page'
-description: 'Description of Page'
-data:
-  posts: data/posts.json
----
-```
-
-In your page, you can get this data by using:
-
-```
-{{data.posts}}
-```
-
-Yaml and JSON data files are simply static data, but JavaScript files can be anything, even asynchronous data. JavaScript data files should export a single function. That function will be called with a sitemap object, the current page, and a callback function. For example, say you had the following front matter:
-
-```
-category: Bears
-data:
-  bears: data/bears.js
-```
-
-If you wanted to add an array of all the posts in the 'Bears' category, you can create a `bears.js` file that adds the data to each page. Data files are called with the site (array of pages), the particular page (object), and an error-first callback:
-
-```js
-module.exports = function (site, page, cb) {
-  var bears = site.filter(function (p) {
-    return p.category === 'Bears'
-  })
-  cb(null, bears)
-}
-```
-
-Now by adding `bears.js` to your page's metadata, you can use `{{data.bears}}` in your page.
-
-Inside data files, you can also add data directly to the page's data object, instead of returning the data in the callback. For example, if you wanted to add a 'next' and 'previous' link to each post, you could create a data file with the following:
-
-```js
-module.exports = function (site, page, done) {
-  var posts = site.filter(function (p) {
-    return p.url.includes('/posts/')
-  })
-
-  var index = posts.indexOf(page)
-  page.data.next = posts[index + 1] || posts[0]
-  page.data.prev = posts[index - 1] || posts[posts.length - 1]
-
-  done()
-}
-```
-
-Now anything in the `posts` folder will have a `{{data.next}}` and `{{data.prev}}` key.
-
-# Why
-
-> There are 4 million static site generators out there, why build another one?
-
-Totally valid point. I began this journey by looking through almost every static site generator on npm (there are hundreds, but many are undocumented or empty). It seemed so stupid to reinvent a wheel that seemingly everybody has invented. After trying a lot of them out, and weighing my options, I still felt that they were lacking. Not in features, but in *focus*. Most of them lock you into a particular way of working. They are immense, opinionated structures that try to do everything for you. They include a cli that generates scaffolds, a server, a file watcher, and all kinds of other features.
-
-Static-site isn't a magic bullet. It doesn't do everything for you. It doesn't have a scaffolding command, or a server, or a cute name. And it probably won't scale up to hundreds and thousands of pages. Instead, it just does one thing: take a folder of files and data and turn it into HTML. It's up to you to figure out how to preprocess your Sass, or bundle JavaScript, or run a development server. It's up to you to watch files and figure out a task runner. Static Site is for developers working on small DIY projects. Hopefully it's useful to you.
 
 ## Contributing
 
