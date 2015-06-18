@@ -51,7 +51,7 @@ The options for Static Site are below (with their default values).
 | helpers          | `[]`                          | array of helper files to run |
 | files          | `['html', 'md', 'markdown']`    | array of file extentions to parse |
 | clean          | `false`                         | remove all files in build folder before building |
-| templateEngine | `'hogan'`                       | which template engine to use from [consolidate.js](https://github.com/tj/consolidate.js#supported-template-engines) |
+| templateEngine | `false`                       | path to templateEngine |
 
 
 # Getting started
@@ -221,17 +221,79 @@ Static-site isn't a magic bullet. It doesn't do everything for you. It doesn't h
 
 ## Templates
 
-By default, static-site uses [hogan.js](http://twitter.github.io/hogan.js/) templates, but you can use whatever template-engine your heart desires. Static Site uses [consolidate.js](https://github.com/tj/consolidate.js) to render templates, so you can use any template engine supported by consolidate (which is [a lot](https://github.com/tj/consolidate.js#supported-template-engines)).
+By default, static-site uses [swig](http://paularmstrong.github.io/swig/) templates, but you can use whatever template-engine your heart desires. To use a different template engine, just add the path to your template engine as the `templateEngine` option. The template engine file should be a module that exports a single function. While building each page Static Site will call that function with your site options, the page content, the page's data, and a callback function. For example, to use [jade](http://jade-lang.com/) instead of swig, just use:
 
-To use a different template engine, just set the `templateEngine` option to the engine you want to use. For example, to use swig, just set `templateEngine: 'swig'`.
+```
+var jade = require('jade')
 
-Using a specific layout on a page is as easy as pointing to the layout in your front matter:
+function (options, template, data, cb) {
+  var fn = jade.compile(template, {})
+  var html = fn(data)
+  cb(null, html)
+}
+```
+
+Assuming you have that saved to a file named `render.js`, you can now run `static-site -t render.js` and your templates will now be parsed as Jade instead of swig.
+
+### Using Swig
+
+Static site sets up swig partials and layouts for you. Using a specific layout on a page is as easy as pointing to the layout in your front matter:
 
 ```
 ---
-layout: layouts/main.hbs
+layout: layouts/post.html
 ---
 ```
+
+Now that page will use the post layout, which could look something like this:
+
+```
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{title}}</title>
+</head>
+<body>
+  {% include "header.html" %}
+  {% block content %}{% endblock %}
+  {% include "footer.html" %}
+</body>
+</html>
+```
+
+The content of the page will be inserted into the content block in the layout.
+
+Layouts can also [extend other layouts](http://paularmstrong.github.io/swig/docs/#inheritance) and [include partials](http://paularmstrong.github.io/swig/docs/tags/#include), so you could have a main layout you use for every page, and a dedicated post layout which extends the main layout.
+
+> `layouts/main.html`
+
+```
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{title}}</title>
+</head>
+<body>
+  {% include "header.html" %}
+  {% block content %}{% endblock %}
+  {% include "footer.html" %}
+</body>
+</html>
+```
+
+> `layouts/post.html`
+
+```
+{% extends 'layout.html' %}
+{% include "post-sidebar.html" %}
+{% block content %}{% endblock %}
+```
+
+Now all of your pages which point to the post layout will get the sidebar.
+
+### Page Properties
 
 Inside your template you will have access to the front matter of each page, plus a few other properties of the page that Static Site gives you for free:
 
