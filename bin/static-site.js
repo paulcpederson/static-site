@@ -26,6 +26,12 @@ var yargs = require('yargs')
       default: defaults.files,
       describe: 'array of file extensions to compile'
     },
+    'h': {
+      alias: 'helpers',
+      type: 'array',
+      default: defaults.helpers,
+      describe: 'array of site helpers to run'
+    },
     'c': {
       alias: 'clean',
       type: 'boolean',
@@ -39,8 +45,7 @@ var yargs = require('yargs')
       describe: 'template engine to use'
     }
   })
-  .help('h')
-  .alias('h', 'help')
+  .help('help')
   .version(require(__dirname + '/../package.json').version + '\n', 'v')
   .alias('v', 'version').argv
 
