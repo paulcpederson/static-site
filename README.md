@@ -211,14 +211,6 @@ module.exports = function (site, page, done) {
 
 Now anything in the `posts` folder will have a `{{next}}` and `{{prev}}` key holding the next or previous post.
 
-# Why
-
-> There are 4 million static site generators out there, why build another one?
-
-Totally valid point. I began this journey by looking through almost every static site generator on npm (there are hundreds, but many are undocumented or empty). It seemed so stupid to reinvent a wheel that seemingly everybody has invented. After trying a lot of them out, and weighing my options, I still felt that they were lacking. Not in features, but in *focus*. Most of them lock you into a particular way of working. They are immense, opinionated structures that try to do everything for you. They include a cli that generates scaffolds, a server, a file watcher, and all kinds of other features.
-
-Static-site isn't a magic bullet. It doesn't do everything for you. It doesn't have a scaffolding command, or a server, or a cute name. And it probably won't scale up to hundreds and thousands of pages. Instead, it just does one thing: take a folder of files and data and turn it into HTML. It's up to you to figure out how to preprocess your Sass, or bundle JavaScript, or run a development server. It's up to you to watch files and figure out a task runner. Static Site is for developers working on small DIY projects. Hopefully it's useful to you.
-
 ## Templates
 
 By default, static-site uses [swig](http://paularmstrong.github.io/swig/) templates, but you can use whatever template-engine your heart desires. To use a different template engine, just add the path to your template engine as the `templateEngine` option. The template engine file should be a module that exports a single function. While building each page Static Site will call that function with your site options, the page content, the page's data, and a callback function. For example, to use [jade](http://jade-lang.com/) instead of swig, just use:
@@ -309,6 +301,14 @@ The `root` property is especially useful for things like stylesheets:
 ```
 <link rel="stylesheet" href="{{root}}/css/screen.css">
 ```
+
+# Why
+
+> There are 4 million static site generators out there, why build another one?
+
+Totally valid point. I began this journey by looking through almost every static site generator on npm (there are hundreds, but many are undocumented or empty). It seemed so stupid to reinvent a wheel that seemingly everybody has invented. After trying a lot of them out, and weighing my options, I still felt that they were lacking. Not in features, but in *focus*. Most of them lock you into a particular way of working. They are immense, opinionated structures that try to do everything for you. They include a cli that generates scaffolds, a server, a file watcher, and all kinds of other features.
+
+Static-site isn't a magic bullet. It doesn't do everything for you. It doesn't have a scaffolding command, or a server, or a cute name. And it probably won't scale up to hundreds and thousands of pages. Instead, it just does one thing: take a folder of files and data and turn it into HTML. It's up to you to figure out how to preprocess your Sass, or bundle JavaScript, or run a development server. It's up to you to watch files and figure out a task runner. Static Site is for developers working on small DIY projects. Hopefully it's useful to you.
 
 ## Contributing
 
