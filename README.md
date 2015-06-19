@@ -123,7 +123,7 @@ In your page, you can get this data by using:
 {{data.posts}}
 ```
 
-JavaScript data files should export a single function that will be called with the page and a callback function. In this way you can add asynchronous data do a page. Say for instance, you wanted to add a list of your GitHub repos everytime you build the site. First, you would add the data file to your page:
+JavaScript data files should export a single function that will be called with the page and a callback function. In this way you can add asynchronous data to a page. Say for instance, you wanted to add a list of your GitHub repos everytime you build the site. First, you would add the data file to your page's frontmatter:
 
 ```
 ---
