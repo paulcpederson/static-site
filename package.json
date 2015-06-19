@@ -36,6 +36,7 @@
     "gray-matter": "^2.0.0",
     "highlight.js": "^8.6.0",
     "markdown-it": "^4.2.2",
+    "mkdirp": "^0.5.1",
     "object-assign": "^3.0.0",
     "swig": "^1.4.2",
     "yargs": "^3.10.0"
