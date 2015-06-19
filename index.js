@@ -33,7 +33,7 @@ function staticSite (options, cb) {
       return cb(null, pages, stats)
     })
     .catch(function (err) {
-      cb(err)
+      cb(err.stack)
     })
 }
 
