@@ -2,6 +2,7 @@
 var staticSite = require('../')
 var defaults = require('../lib/defaults')
 var color = require('cli-color')
+var path = require('path')
 var util = require('util')
 var yargs = require('yargs')
   .usage('Usage: $0 [options]')
@@ -41,18 +42,38 @@ var yargs = require('yargs')
       type: 'string',
       default: defaults.templateEngine,
       describe: 'template engine to use'
+    },
+    'v': {
+      alias: 'verbose',
+      type: 'boolean',
+      default: false,
+      describe: 'enable verbose logging'
     }
   })
   .help('help')
-  .version(require(__dirname + '/../package.json').version + '\n', 'v')
-  .alias('v', 'version').argv
+  .version(require(__dirname + '/../package.json').version + '\n')
+  .argv
 
-staticSite(yargs, function (err, site, stats) {
+staticSite(yargs, function (err, stats) {
   if (err) {
     console.error(err)
     process.exit(1)
   }
-  var message = util.format('Built %s files in %sms', stats.pages, stats.duration)
+
+  if (yargs.verbose) {
+    console.log(color.green('Built the following pages:'))
+    var buildPath = path.join(process.cwd(), stats.build)
+    stats.pages.forEach(function (page) {
+      page = page.replace(buildPath, '')
+      console.log('  ' + page)
+    })
+    console.log(color.green('Source Folder:'))
+    console.log('  ' + stats.source)
+    console.log(color.green('Build Folder:'))
+    console.log('  ' + buildPath)
+  }
+
+  var message = util.format('Built %s files in %sms', stats.pages.length, stats.duration)
   console.log(color.green(message))
   process.exit(0)
 })
