@@ -19,9 +19,8 @@ Static Site has both a Node API, as well as a CLI.
 ```
 var staticSite = require('static-site')
 
-staticSite(options, function (err, site, stats) {
-  console.log(site)  // array of pages built
-  console.log(stats) // {pages: 14, start: 1434175863750, end: 1434175863770, duration: 20}
+staticSite(options, function (err, stats) {
+  console.log(stats) // {pages: [...], source: '', build: '', start: 1434175863750, end: 1434175863770, duration: 20}
 })
 ```
 

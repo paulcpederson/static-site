@@ -20,17 +20,18 @@ function staticSite (options, cb) {
     .then(data.bind(context))
     .then(helpers.bind(context))
     .then(template.bind(context))
-    .then(build.bind(context))
+    .then(build)
     .then(function (pages) {
-      console.log(pages)
       var t2 = Date.now()
       var stats = {
-        pages: pages.length,
+        pages: pages,
+        source: context.sourcePath,
+        build: opts.build,
         start: context.start,
         end: t2,
         duration: t2 - context.start
       }
-      return cb(null, pages, stats)
+      return cb(null, stats)
     })
     .catch(function (err) {
       cb(err.stack)
