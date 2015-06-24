@@ -7,8 +7,8 @@
     "url": "https://github.com/paulcpederson/static-site/issues"
   },
   "devDependencies": {
+    "faucet": "0.0.1",
     "standard": "*",
-    "tap-spec": "^3.0.0",
     "tape": "^4.0.0"
   },
   "homepage": "https://github.com/paulcpederson/static-site",
@@ -26,7 +26,7 @@
     "url": "https://github.com/paulcpederson/static-site.git"
   },
   "scripts": {
-    "test": "standard && tape test/*.js | tap-spec"
+    "test": "standard && faucet test/ test/utils/"
   },
   "dependencies": {
     "async-foreach": "^0.1.3",
