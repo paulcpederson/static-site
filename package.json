@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "faucet": "0.0.1",
+    "rimraf": "^2.4.0",
     "standard": "*",
     "tape": "^4.0.0"
   },
