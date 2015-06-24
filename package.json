@@ -29,7 +29,6 @@
     "test": "standard && faucet test/ test/utils/"
   },
   "dependencies": {
-    "async-foreach": "^0.1.3",
     "cli-color": "^1.0.0",
     "es6-promise": "^2.3.0",
     "glob": "^5.0.10",
