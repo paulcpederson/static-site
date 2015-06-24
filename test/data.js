@@ -10,11 +10,13 @@ var options = {
 
 test('.json, .yml, and .js data files', function (t) {
   rimraf.sync('test/fixtures/data/build')
-  t.plan(2)
+  t.plan(4)
   staticSite(options, function (err, stats) {
     t.error(err)
     var file = fs.readFileSync(stats.pages[0], 'utf8')
-    t.equal(file, 'JSON YAML JS')
+    t.ok(file.indexOf('JSON') > -1)
+    t.ok(file.indexOf('YAML') > -1)
+    t.ok(file.indexOf('JS') > -1)
     rimraf.sync('test/fixtures/data/build')
   })
 })
