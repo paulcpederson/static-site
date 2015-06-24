@@ -4,7 +4,7 @@ var defaults = require('./lib/defaults')
 var source = require('./lib/source')
 var frontmatter = require('./lib/frontmatter')
 var data = require('./lib/data')
-var helpers = require('./lib/data')
+var helpers = require('./lib/helpers')
 var template = require('./lib/template')
 var build = require('./lib/build')
 
