@@ -37,12 +37,6 @@ var yargs = require('yargs')
       default: defaults.helpers,
       describe: 'array of site helpers to run'
     },
-    'c': {
-      alias: 'clean',
-      type: 'boolean',
-      default: defaults.clean,
-      describe: 'remove everything in build folder prior to build'
-    },
     't': {
       alias: 'templateEngine',
       type: 'string',
@@ -64,6 +58,10 @@ function green (message) {
   console.log(color.green(message))
 }
 
+function indent (message) {
+  console.log('  ' + message)
+}
+
 staticSite(yargs, function (err, stats) {
   if (err) {
     console.error(err)
@@ -75,12 +73,12 @@ staticSite(yargs, function (err, stats) {
     var buildPath = path.join(process.cwd(), stats.build)
     stats.pages.forEach(function (page) {
       page = page.replace(buildPath, '')
-      console.log('  ' + page)
+      indent(page)
     })
     green('Source Folder:')
-    console.log('  ' + stats.source)
+    indent(stats.source)
     green('Build Folder:')
-    console.log('  ' + buildPath)
+    indent(buildPath)
   }
 
   var message = util.format('Built %s files in %sms', stats.pages.length, stats.duration)

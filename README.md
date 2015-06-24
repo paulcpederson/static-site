@@ -34,7 +34,6 @@ static-site --help
 -i, --ignore            Array of glob patterns to ignore
 -h, --helpers           Array of helper files to run
 -f, --files             File extensions to match
--c, --clean             Remove files generated from previous builds
 -t, --templateEngine    Template engine to use for each page
 ```
 
@@ -49,7 +48,6 @@ The options for Static Site are below (with their default values).
 | ignore         | `['assets/**']`                 | array of globs to ignore |
 | helpers          | `[]`                          | array of helper files to run |
 | files          | `['html', 'md', 'markdown']`    | array of file extentions to parse |
-| clean          | `false`                         | remove all files in build folder before building |
 | templateEngine | `false`                       | path to templateEngine |
 
 
