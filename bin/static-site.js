@@ -22,7 +22,7 @@ var yargs = require('yargs')
     'f': {
       alias: 'files',
       type: 'array',
-      default: defaults.files,
+      default: [],
       describe: 'array of file extensions to compile'
     },
     'i': {
