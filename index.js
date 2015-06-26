@@ -16,12 +16,21 @@ function staticSite (options, cb) {
   } catch (e) {
     pkg = {}
   }
+
+  var extraOptions = Object.keys(options)
+      .filter(function (key) { return Object.keys(defaults).indexOf(key) === -1})
+      .reduce(function (prev, curr) {
+        prev[curr] = options[curr]
+        return prev
+      }, {})
+
   var packageOptions = (pkg['static-site'] || {})
   var opts = assign({}, defaults, packageOptions, options)
   var context = {
     sourcePath: path.join(cwd, opts.source),
     start: Date.now(),
-    options: opts
+    options: opts,
+    extraOptions: extraOptions
   }
   source.call(context)
     .then(frontmatter.bind(context))
