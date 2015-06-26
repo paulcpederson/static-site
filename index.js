@@ -7,11 +7,19 @@ var data = require('./lib/data')
 var helpers = require('./lib/helpers')
 var template = require('./lib/template')
 var build = require('./lib/build')
+var cwd = process.cwd()
 
 function staticSite (options, cb) {
-  var opts = assign({}, defaults, options)
+  var pkg = {}
+  try {
+    pkg = require(path.join(cwd, 'package.json'))
+  } catch (e) {
+    pkg = {}
+  }
+  var packageOptions = (pkg['static-site'] || {})
+  var opts = assign({}, defaults, packageOptions, options)
   var context = {
-    sourcePath: path.join(process.cwd(), opts.source),
+    sourcePath: path.join(cwd, opts.source),
     start: Date.now(),
     options: opts
   }
