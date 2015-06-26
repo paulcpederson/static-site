@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var staticSite = require('../')
-var defaults = require('../lib/defaults')
+var removeUndefined = require('../lib/utils/remove-undefined')
 var color = require('cli-color')
 var path = require('path')
 var util = require('util')
@@ -10,13 +10,11 @@ var yargs = require('yargs')
     'b': {
       alias: 'build',
       type: 'string',
-      default: defaults.build,
       describe: 'path to build folder'
     },
     's': {
       alias: 'source',
       type: 'string',
-      default: defaults.source,
       describe: 'path to source folder'
     },
     'f': {
@@ -28,19 +26,16 @@ var yargs = require('yargs')
     'i': {
       alias: 'ignore',
       type: 'array',
-      default: defaults.ignore,
       describe: 'array of paths in source folder to ignore'
     },
     'h': {
       alias: 'helpers',
       type: 'array',
-      default: defaults.helpers,
       describe: 'array of site helpers to run'
     },
     't': {
       alias: 'templateEngine',
       type: 'string',
-      default: defaults.templateEngine,
       describe: 'template engine to use'
     },
     'v': {
@@ -62,7 +57,9 @@ function indent (message) {
   console.log('  ' + message)
 }
 
-staticSite(yargs, function (err, stats) {
+var options = removeUndefined(yargs)
+
+staticSite(options, function (err, stats) {
   if (err) {
     console.error(err)
     process.exit(1)
