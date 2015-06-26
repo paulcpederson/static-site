@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 var staticSite = require('../')
-var removeUndefined = require('../lib/utils/remove-undefined')
 var color = require('cli-color')
 var path = require('path')
 var util = require('util')
@@ -10,39 +9,37 @@ var yargs = require('yargs')
     'b': {
       alias: 'build',
       type: 'string',
-      describe: 'path to build folder'
+      describe: 'Path to build folder'
     },
     's': {
       alias: 'source',
       type: 'string',
-      describe: 'path to source folder'
+      describe: 'Path to source folder'
     },
     'f': {
       alias: 'files',
       type: 'array',
-      default: [],
-      describe: 'array of file extensions to compile'
+      describe: 'Array of file extensions to compile'
     },
     'i': {
       alias: 'ignore',
       type: 'array',
-      describe: 'array of paths in source folder to ignore'
+      describe: 'Array of paths in source folder to ignore'
     },
     'h': {
       alias: 'helpers',
       type: 'array',
-      describe: 'array of site helpers to run'
+      describe: 'Array of site helpers to run'
     },
     't': {
       alias: 'templateEngine',
       type: 'string',
-      describe: 'template engine to use'
+      describe: 'Template engine to use'
     },
     'v': {
       alias: 'verbose',
       type: 'boolean',
-      default: false,
-      describe: 'enable verbose logging'
+      describe: 'Enable verbose logging'
     }
   })
   .help('help')
@@ -57,7 +54,14 @@ function indent (message) {
   console.log('  ' + message)
 }
 
-var options = removeUndefined(yargs)
+var blacklist = ['_', '$0', 'v', 'verbose', 'help', 'version', 's', 'b', 'f', 't', 'h', 'i']
+var options = {}
+
+Object.keys(yargs).forEach(function (option) {
+  if (yargs[option] !== 'undefined' && blacklist.indexOf(option) === -1) {
+    options[option] = yargs[option]
+  }
+})
 
 staticSite(options, function (err, stats) {
   if (err) {
