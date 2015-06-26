@@ -1,0 +1,13 @@
+{
+  "name": "test-package",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "../../../bin/static-site.js",
+    "build-custom": "../../../bin/static-site.js -i hat"
+  },
+  "static-site": {
+    "ignore": [
+      "ignored/"
+    ]
+  }
+}
