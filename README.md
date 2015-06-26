@@ -27,33 +27,38 @@ staticSite(options, function (err, stats) {
 ## CLI
 
 ```
-static-site --help
+Usage: static-site [options]
 
--b, --build             Name of build folder
--s, --source            Name of source folder
--i, --ignore            Array of glob patterns to ignore
--h, --helpers           Array of helper files to run
--f, --files             File extensions to match
--t, --templateEngine    Template engine to use for each page
+Options:
+  -b, --build           Path to build folder
+  -s, --source          Path to source folder
+  -f, --files           Array of file extensions to compile
+  -i, --ignore          Array of paths in source folder to ignore
+  -h, --helpers         Array of site helpers to run
+  -t, --templateEngine  Template engine to use
+  -v, --verbose         Enable verbose logging
+  --help                Show help
+  --version             Show version number
 ```
 
 # Options
 
 The options for Static Site are below (with their default values).
 
-| Option         | Default Value                   | Description |
-| -------------- | ------------------------------- | ----------- |
-| build          | `'build'`                       | path to build folder |
-| source         | `'source'`                      | path to source folder |
-| ignore         | `['assets/**']`                 | array of globs to ignore |
-| helpers          | `[]`                          | array of helper files to run |
-| files          | `['html', 'md', 'markdown']`    | array of file extentions to parse |
-| templateEngine | `false`                       | path to templateEngine |
+| Option | Default Value | Description |
+| ------ | ------------- | ----------- |
+| build  | `'build'` | path to build folder |
+| source | `'source'` | path to source folder |
+| ignore | `[]` | array of globs to ignore (in addition to files and folders with underscores) |
+| helpers | `[]` | array of helper files to run |
+| files | `['html', 'md', 'markdown']` | array of file extentions to parse (in addition to default extensions) |
+| templateEngine | `false` | path to custom template engine file  |
 
+**ProTip** If you pass an option that Static Site doesn't recognize, it will add that option to each page's frontmatter. For example, if you run `static-site --ENV production`, then in your template you can check for the `{{ENV}}` variable. Frontmatter will override data added with extra options, making this a good way to set default templates as well.
 
 # Getting started
 
-To get started using static-site, just install it:
+To get started using Static Site, just install it:
 
 ```
 npm install static-site --save-dev
@@ -61,23 +66,26 @@ npm install static-site --save-dev
 
 After that, you can add a script to your `package.json` that runs the build:
 
-
 ```
   "scripts": {
     "build": "static-site"
   }
 ```
 
-Now you can use `npm run build` to run static site with the [default options](#options). To change the options, you can either use the [cli flags](#cli) to change them, or list them in your `package.json` under the `static-site` key:
+Now you can use `npm run build` to run Static Site with the [default options](#options). To change the options, you can either use the [cli flags](#cli) to change them, or list them in your `package.json` under the `static-site` key:
 
 ```
   "static-site": {
-    "templateEngine": 'jade',
+    "templateEngine": 'my-engine.js',
     "build": "dist"
   }
 ```
 
-Now when you build, static site will use the Jade template engine and build to a folder called `dist`. Static Site has four basic building blocks:
+Now when you build, Static Site will use your custom template engine and build to a folder called `dist`. Options set in the command line will override options set with via `package.json`.
+
+# How
+
+Static Site has four basic building blocks:
 
 - [Front Matter](#front-matter) — data stored at the top of each page
 - [Data Files](#data) — data stored in separate files (Yaml, JSON, JavaScript)
@@ -99,7 +107,7 @@ arrayOfThings:
 ```
 
 Both `{{title}}` and `{{description}}` are now available to your templates as strings, while `{{arrayOfThings}}` is available as an array.
-Static Site uses [gray-matter](https://www.npmjs.com/package/gray-matter) for parsing front matter which allows for quite a bit of flexibility. If you want you can write your front matter as JSON or even CoffeeScript. To change how your front matter is interpretted, just add the language [after the firt delimiter](https://www.npmjs.com/package/gray-matter#options-lang).
+Static Site uses [gray-matter](https://www.npmjs.com/package/gray-matter) for parsing front matter which allows for quite a bit of flexibility. You can write your front matter as JSON or even CoffeeScript. To change how your front matter is interpreted, just add the language [after the first delimiter](https://www.npmjs.com/package/gray-matter#options-lang).
 
 ## Data
 
@@ -120,7 +128,7 @@ In your page, you can get this data by using:
 {{data.posts}}
 ```
 
-JavaScript data files should export a single function that will be called with the page and a callback function. In this way you can add asynchronous data to a page. Say for instance, you wanted to add a list of your GitHub repos everytime you build the site. First, you would add the data file to your page's frontmatter:
+JavaScript data files should export a single function that will be called with the page and a callback function. In this way you can add asynchronous data to a page. Say for instance, you wanted to add a list of your GitHub repos to a page. First, you would add the data file to your page's frontmatter:
 
 ```
 ---
@@ -135,10 +143,15 @@ Then in `data/repos.js` you would use something along these lines:
 
 ```js
 var request = require('request')
-var url = 'https://api.github.com/users/paulcpederson/repos'
+var options = {
+  url: 'https://api.github.com/users/paulcpederson/repos',
+  headers: {
+    'User-Agent': 'static-site'
+  }
+}
 
 module.exports = function (page, cb) {
-  request(url, function (error, response, body) {
+  request(options, function (error, response, body) {
     if (error) {
       return cb(error)
     }
@@ -215,8 +228,8 @@ By default, static-site uses [swig](http://paularmstrong.github.io/swig/) templa
 ```
 var jade = require('jade')
 
-function (options, template, data, cb) {
-  var fn = jade.compile(template, {})
+function (options, content, data, cb) {
+  var fn = jade.compile(content, {})
   var html = fn(data)
   cb(null, html)
 }
@@ -226,7 +239,7 @@ Assuming you have that saved to a file named `render.js`, you can now run `stati
 
 ### Using Swig
 
-Static site sets up swig partials and templates for you out of the box. Using a specific template on a page is as easy as pointing to it  in your front matter:
+Static-Site sets up swig partials and templates for you out of the box. Using a specific template on a page is as easy as pointing to it in your front matter:
 
 ```
 ---
@@ -253,7 +266,7 @@ Now that page will use the post template, which could look something like this:
 
 The content of the page will be inserted into the content block in the template.
 
-Templates can also [extend other templates](http://paularmstrong.github.io/swig/docs/#inheritance) and [include partials](http://paularmstrong.github.io/swig/docs/tags/#include), so you could have a main layout template you use for every page, and a dedicated post tmeplate which extends the main layout.
+Templates can also [extend other templates](http://paularmstrong.github.io/swig/docs/#inheritance) and [include partials](http://paularmstrong.github.io/swig/docs/tags/#include), so you could have a main layout template you use for every page, and a dedicated post template which extends the main layout.
 
 > `templates/main.html`
 
@@ -303,9 +316,9 @@ The `root` property is especially useful for things like stylesheets:
 
 > There are 4 million static site generators out there, why build another one?
 
-Totally valid point. I began this journey by looking through almost every static site generator on npm (there are hundreds, but many are undocumented or empty). It seemed so stupid to reinvent a wheel that seemingly everybody has invented. After trying a lot of them out, and weighing my options, I still felt that they were lacking. Not in features, but in *focus*. Most of them lock you into a particular way of working. They are immense, opinionated structures that try to do everything for you. They are meant for large projects with hundreds of pages. They include a cli that generates scaffolds, a server, a file watcher, and all kinds of other features.
+Totally valid point. I began this journey by looking through almost every Static Site generator on npm (there are hundreds, but many are undocumented or empty). It seemed so stupid to reinvent a wheel that seemingly everybody has invented. After trying a lot of them out, and weighing my options, I still felt that they were lacking. Not in features, but in *focus*. Most of them lock you into a particular way of working. They are immense, opinionated structures that try to do everything for you. They are meant for large projects with hundreds of pages. They include a cli that generates scaffolds, a server, a file watcher, and all kinds of other features.
 
-Static-site isn't a magic bullet. It doesn't do everything for you. It doesn't have a scaffolding command, or a server, or a cute name. And it probably won't scale up to hundreds and thousands of pages. Instead, it just does one thing: take a folder of files and data and turn it into HTML. It's up to you to figure out how to preprocess your Sass, or bundle JavaScript, or run a development server. It's up to you to watch files and figure out a task runner. Static Site is for developers working on small DIY projects. Hopefully it's useful to you.
+Static-site isn't a magic bullet. It doesn't do everything for you. It doesn't have a scaffolding command, or a server, or a cute name. And it probably won't scale up to hundreds of pages. Instead, it just does one thing: take a folder of files and data and turn it into HTML. It's up to you to figure out how to compile your Sass, or bundle JavaScript, or run a development server. It's up to you to watch files and figure out a task runner. Static Site is for developers working on small DIY projects. Hopefully it's useful to you.
 
 ## Contributing
 
