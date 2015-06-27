@@ -264,11 +264,11 @@ Now that page will use the post template, which could look something like this:
 </html>
 ```
 
-The content of the page will be inserted into the content block in the template.
+By default, the content of the page will be inserted into the content block in the template. You can set the block name with the `block` key in your frontmatter to change the block the content will be rendered to. For example using `block: post` will instert the content into the `post` block in whatever template you are using. This is useful for layouts which extend a main layout (below).
 
-Templates can also [extend other templates](http://paularmstrong.github.io/swig/docs/#inheritance) and [include partials](http://paularmstrong.github.io/swig/docs/tags/#include), so you could have a main layout template you use for every page, and a dedicated post template which extends the main layout.
+Templates can [extend other templates](http://paularmstrong.github.io/swig/docs/#inheritance) and [include partials](http://paularmstrong.github.io/swig/docs/tags/#include), so you could have a main layout template you use for every page, and a dedicated post template which extends the main layout.
 
-> `templates/main.html`
+> `_templates/main.html`
 
 ```
 <!doctype html>
@@ -285,15 +285,17 @@ Templates can also [extend other templates](http://paularmstrong.github.io/swig/
 </html>
 ```
 
-> `templates/post.html`
+> `_templates/post.html`
 
 ```
 {% extends 'layout.html' %}
-{% include "post-sidebar.html" %}
-{% block content %}{% endblock %}
+{% block content %}
+  {% include "post-sidebar.html" %}
+  {% block post %}{% endblock %}
+{% endblock %}
 ```
 
-Now all of your pages which point to the post layout will get the sidebar.
+Now all of your pages which point to the post layout will get the sidebar. Those pages should use `template: _templates/post.html` and `block: post` in their frontmatter.
 
 ### Page Properties
 
@@ -305,12 +307,6 @@ Inside your template you will have access to the front matter of each page, plus
 - `file` - filepath to source file
 - `isMarkdown` - whether the source file was markdown
 - `content` - the actual text content of the post
-
-The `root` property is especially useful for things like stylesheets:
-
-```
-<link rel="stylesheet" href="{{root}}/css/screen.css">
-```
 
 # Why
 
