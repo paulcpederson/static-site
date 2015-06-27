@@ -203,16 +203,18 @@ As another example, if you want to add a `next` and `prev` link to all the blog 
 
 ```js
 function isPost (page) {
-  return page.url.includes('/posts/')
+  return page.url.indexOf('/articles/') > -1
 }
 
-module.exports = function (site, page, done) {
-  var posts = site.filter(isPost)
+module.exports = function (site, cb) {
+  var posts = site.filter(isPost).sort(function (a, b) {
+    return new Date(b.date) - new Date(a.date)
+  })
   site = site.map(function (page) {
     if (isPost(page)) {
       var index = posts.indexOf(page)
-      page.next = posts[index + 1] || posts[0]
-      page.prev = posts[index - 1] || posts[posts.length - 1]
+      page.prev = posts[index + 1] || posts[0]
+      page.next = posts[index - 1] || posts[posts.length - 1]
     }
   })
   cb(null, site)
