@@ -4,7 +4,7 @@ var staticSite = require('..')
 var fs = require('fs')
 
 var options = {
-  helpers: ['concat.js'],
+  helpers: ['test/fixtures/helpers/source/concat.js'],
   source: 'test/fixtures/helpers/source',
   build: 'test/fixtures/helpers/build'
 }
