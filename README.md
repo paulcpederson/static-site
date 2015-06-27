@@ -264,6 +264,8 @@ Now that page will use the post template, which could look something like this:
 </html>
 ```
 
+In your template, you'll have access to all swig [tags](http://paularmstrong.github.io/swig/docs/tags/) and [filters](http://paularmstrong.github.io/swig/docs/filters/). In addition, the [swig-extras](https://github.com/paularmstrong/swig-extras) library has been added, giving you access to more tags and filters like `{% markdown %}` and `|groupby`. Swig-extras is not documented well, but [the tests](https://github.com/paularmstrong/swig-extras/tree/master/tests) show example usage of these additional tags and filters.
+
 By default, the content of the page will be inserted into the content block in the template. You can set the block name with the `block` key in your frontmatter to change the block the content will be rendered to. For example using `block: post` will instert the content into the `post` block in whatever template you are using. This is useful for layouts which extend a main layout (below).
 
 Templates can [extend other templates](http://paularmstrong.github.io/swig/docs/#inheritance) and [include partials](http://paularmstrong.github.io/swig/docs/tags/#include), so you could have a main layout template you use for every page, and a dedicated post template which extends the main layout.
