@@ -39,6 +39,7 @@
     "markdown-it": "^4.2.2",
     "mkdirp": "^0.5.1",
     "object-assign": "^3.0.0",
+    "read-data": "^0.3.0",
     "swig": "^1.4.2",
     "swig-extras": "0.0.1",
     "yargs": "^3.10.0"
