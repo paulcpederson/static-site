@@ -1,5 +1,7 @@
 # Static Site
 
+> A simple static site generator
+
 [![npm][npm-image]][npm-url]
 [![travis][travis-image]][travis-url]
 
@@ -8,15 +10,19 @@
 [travis-image]: https://img.shields.io/travis/paulcpederson/static-site.svg?style=flat-square
 [travis-url]: https://travis-ci.org/paulcpederson/static-site
 
-> A simple static site generator
+## Install
 
-# Use
+```
+npm install static-site -g
+```
+
+## Usage
 
 Static Site has both a Node API, as well as a CLI.
 
-## Node API
+### Node API
 
-```
+```js
 var staticSite = require('static-site')
 
 staticSite(options, function (err, stats) {
@@ -24,7 +30,7 @@ staticSite(options, function (err, stats) {
 })
 ```
 
-## CLI
+### CLI
 
 ```
 Usage: static-site [options]
@@ -41,7 +47,7 @@ Options:
   --version             Show version number
 ```
 
-# Options
+### Options
 
 The options for Static Site are below (with their default values).
 
@@ -56,7 +62,7 @@ The options for Static Site are below (with their default values).
 
 **ProTip** If you pass an option that Static Site doesn't recognize, it will add that option to each page's frontmatter. For example, if you run `static-site --ENV production`, then in your template you can check for the `{{ENV}}` variable. Frontmatter will override data added with extra options, making this a good way to set default templates as well.
 
-# Getting started
+## Getting started
 
 To get started using Static Site, just install it:
 
@@ -83,7 +89,7 @@ Now you can use `npm run build` to run Static Site with the [default options](#o
 
 Now when you build, Static Site will use your custom template engine and build to a folder called `dist`. Options set in the command line will override options set with via `package.json`.
 
-# How
+## How
 
 Static Site has four basic building blocks:
 
@@ -92,7 +98,7 @@ Static Site has four basic building blocks:
 - [Helpers](#helpers) — helper functions that manipulate the site
 - [Templates](#templates) — templates for rendering page data
 
-## Front Matter
+### Front Matter
 
 Front matter provides an easy way to add data to each page. Front matter is formatted like yaml, and surrounded by three hyphens on top and bottom:
 
@@ -109,7 +115,7 @@ arrayOfThings:
 Both `{{title}}` and `{{description}}` are now available to your templates as strings, while `{{arrayOfThings}}` is available as an array.
 Static Site uses [gray-matter](https://www.npmjs.com/package/gray-matter) for parsing front matter which allows for quite a bit of flexibility. You can write your front matter as JSON or even CoffeeScript. To change how your front matter is interpreted, just add the language [after the first delimiter](https://www.npmjs.com/package/gray-matter#options-lang).
 
-## Data
+### Data
 
 JSON, YML, and JavaScript are all valid data formats. Say you have a file named `posts.json` in a folder called `data`. To add that data to a page, just add the path to the file:
 
@@ -162,7 +168,7 @@ module.exports = function (page, cb) {
 
 Now the response of the request is available as `{{data.repos}}`.
 
-## Helpers
+### Helpers
 
 Helpers add the ability to manipulate pages at a site level. Helpers are just JavaScript files which export a single function. This function will be called with the site array and an error-first callback. You can do anything you want to the site, and then send the new site to the callback. Helpers are run after data and before templates.
 
@@ -223,7 +229,7 @@ module.exports = function (site, cb) {
 
 Now anything in the `posts` folder will have a `{{next}}` and `{{prev}}` key holding the next or previous post.
 
-## Templates
+### Templates
 
 By default, static-site uses [swig](http://paularmstrong.github.io/swig/) templates, but you can use whatever template-engine your heart desires. To use a different template engine, just add the path to your template engine as the `templateEngine` option. The template engine file should be a module that exports a single function. While building each page Static Site will call that function with your site options, the page content, the page's data, and a callback function. For example, to use [jade](http://jade-lang.com/) instead of swig, just use:
 
@@ -239,7 +245,7 @@ function (options, content, data, cb) {
 
 Assuming you have that saved to a file named `render.js`, you can now run `static-site -t render.js` and your templates will now be parsed as Jade instead of swig.
 
-### Using Swig
+#### Using Swig
 
 Static-Site sets up swig partials and templates for you out of the box. Using a specific template on a page is as easy as pointing to it in your front matter:
 
@@ -301,7 +307,7 @@ Templates can [extend other templates](http://paularmstrong.github.io/swig/docs/
 
 Now all of your pages which point to the post layout will get the sidebar. Those pages should use `template: _templates/post.html` and `block: post` in their frontmatter.
 
-### Page Properties
+#### Page Properties
 
 Inside your template you will have access to the front matter of each page, plus a few other properties of the page that Static Site gives you for free:
 
@@ -312,7 +318,7 @@ Inside your template you will have access to the front matter of each page, plus
 - `isMarkdown` - whether the source file was markdown
 - `content` - the actual text content of the post
 
-# Why
+## Why
 
 > There are 4 million static site generators out there, why build another one?
 
