@@ -115,6 +115,8 @@ arrayOfThings:
 Both `{{title}}` and `{{description}}` are now available to your templates as strings, while `{{arrayOfThings}}` is available as an array.
 Static Site uses [gray-matter](https://www.npmjs.com/package/gray-matter) for parsing front matter which allows for quite a bit of flexibility. You can write your front matter as JSON or even CoffeeScript. To change how your front matter is interpreted, just add the language [after the first delimiter](https://www.npmjs.com/package/gray-matter#options-lang).
 
+Static Site creates pretty urls automatically. For example, if you have a file called `about.html` it will be built to `about/index.html`. This means you can link to `/about/` which is a better url for a human being. If you'd like to turn this off for a particular page, just set `prettyUrl` to `false` in the page's frontmatter.
+
 ### Data
 
 JSON, YML, and JavaScript are all valid data formats. Say you have a file named `posts.json` in a folder called `data`. To add that data to a page, just add the path to the file:
