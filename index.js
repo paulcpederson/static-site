@@ -18,7 +18,7 @@ function staticSite (options, cb) {
   }
 
   var extraOptions = Object.keys(options)
-      .filter(function (key) { return Object.keys(defaults).indexOf(key) === -1})
+      .filter(function (key) { return Object.keys(defaults).indexOf(key) === -1 })
       .reduce(function (prev, curr) {
         prev[curr] = options[curr]
         return prev
