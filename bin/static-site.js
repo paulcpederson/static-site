@@ -43,7 +43,7 @@ var yargs = require('yargs')
     }
   })
   .help('help')
-  .version(require(__dirname + '/../package.json').version + '\n')
+  .version(require(path.join(__dirname, '..', 'package.json')).version)
   .argv
 
 function green (message) {
