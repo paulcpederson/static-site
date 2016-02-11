@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.1.1
+
+- update all dependencies
+- standardize styles
+
 ## v1.1.0
 
 - add ability to turn of directory indexes in frontmatter with `prettyUrl: false`

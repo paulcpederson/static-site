@@ -1,7 +1,7 @@
 {
   "name": "static-site",
   "description": "A simple static site generator",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "Paul C Pederson <paul.c.pederson@gmail.com>",
   "bugs": {
     "url": "https://github.com/paulcpederson/static-site/issues"
