@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 var staticSite = require('../')
-var color = require('cli-color')
 var path = require('path')
 var util = require('util')
 var yargs = require('yargs')
@@ -47,7 +46,9 @@ var yargs = require('yargs')
   .argv
 
 function green (message) {
-  console.log(color.green(message))
+  // use green ANSI terminal code, then set it back to normal
+  var greenText = util.format('\x1b[32m%s\x1b[0m', message)
+  console.log(greenText)
 }
 
 function indent (message) {

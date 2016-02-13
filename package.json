@@ -31,7 +31,6 @@
     "test": "standard && faucet test/ test/utils/"
   },
   "dependencies": {
-    "cli-color": "^1.1.0",
     "es6-promise": "^2.3.0",
     "glob": "^5.0.15",
     "gray-matter": "^2.0.2",
