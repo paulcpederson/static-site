@@ -4,11 +4,14 @@
 
 [![npm][npm-image]][npm-url]
 [![travis][travis-image]][travis-url]
+[![standard][standard-image]][standard-url]
 
 [npm-image]: https://img.shields.io/npm/v/static-site.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/static-site
 [travis-image]: https://img.shields.io/travis/paulcpederson/static-site.svg?style=flat-square
 [travis-url]: https://travis-ci.org/paulcpederson/static-site
+[standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
+[standard-url]: http://npm.im/standard
 
 ## Install
 
@@ -60,7 +63,7 @@ The options for Static Site are below (with their default values).
 | files | `['html', 'md', 'markdown']` | array of file extentions to parse (in addition to default extensions) |
 | templateEngine | `false` | path to custom template engine file  |
 
-**ProTip** If you pass an option that Static Site doesn't recognize, it will add that option to each page's frontmatter. For example, if you run `static-site --ENV production`, then in your template you can check for the `{{ENV}}` variable. Frontmatter will override data added with extra options, making this a good way to set default templates as well.
+**ProTip** If you pass an option that Static Site doesn't recognize, it will add that option to each page's frontmatter. For example, if you run `static-site --production`, then in your template you can check for the `{{production}}` variable. Frontmatter will override data added with extra options, making this a good way to set default templates as well.
 
 ## Getting started
 
