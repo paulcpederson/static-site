@@ -31,6 +31,7 @@
     "test": "standard && faucet test/ test/utils/"
   },
   "dependencies": {
+    "argv-parse": "^1.0.0",
     "es6-promise": "^2.3.0",
     "glob": "^5.0.15",
     "gray-matter": "^2.0.2",
@@ -40,7 +41,6 @@
     "object-assign": "^3.0.0",
     "read-data": "^0.3.0",
     "swig": "^1.4.2",
-    "swig-extras": "0.0.1",
-    "yargs": "^3.32.0"
+    "swig-extras": "0.0.1"
   }
 }
