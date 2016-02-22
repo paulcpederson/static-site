@@ -1,14 +1,19 @@
 var lib = require('./lib/')
 var getContext = require('./lib/utils/get-context')
 
+function applyContext (context, library) {
+  return lib[library].bind(null, context)
+}
+
 function staticSite (options, cb) {
   var context = getContext(options)
+  var bindLib = applyContext.bind(null, context)
   lib.source.call(context)
-    .then(lib.frontmatter.bind(context))
-    .then(lib.data.bind(context))
-    .then(lib.helpers.bind(context))
-    .then(lib.template.bind(context))
-    .then(lib.build)
+    .then(bindLib('frontmatter'))
+    .then(bindLib('data'))
+    .then(bindLib('helpers'))
+    .then(bindLib('template'))
+    .then(bindLib('build'))
     .then(function (pages) {
       var t2 = Date.now()
       var stats = {
