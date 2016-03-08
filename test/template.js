@@ -34,6 +34,21 @@ test('swig layouts and partials', function (t) {
   })
 })
 
+test('swig markdown tag', function (t) {
+  rimraf.sync('test/fixtures/markdown/build')
+  var markdownOptions = {
+    source: 'test/fixtures/markdown/source',
+    build: 'test/fixtures/markdown/build'
+  }
+  t.plan(2)
+  staticSite(markdownOptions, function (err, stats) {
+    t.error(err)
+    var file = fs.readFileSync(stats.pages[0], 'utf8')
+    t.ok(file.indexOf('<code class="html"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>') > -1)
+    rimraf.sync('test/fixtures/markdown/build')
+  })
+})
+
 var customOptions = {
   source: 'test/fixtures/templateEngine/source',
   build: 'test/fixtures/templateEngine/build',

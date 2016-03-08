@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+- create new `{% markdown %}` tag that uses markdown-it (#7)
+
 ## v1.1.3
 - remove `yargs` dependency (use `argv-parse` instead)
 
