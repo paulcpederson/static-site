@@ -13,7 +13,7 @@ test('should allow access to named collections from front matter', function (t) 
   t.plan(2)
   staticSite(options, function (err, stats) {
     t.error(err)
-    var file = fs.readFileSync(stats.pages[0], 'utf8')
+    var file = fs.readFileSync(stats.pages.pop(), 'utf8')
     t.equal(file, 'page one page two ')
     rimraf.sync('test/fixtures/collections/build')
   })
