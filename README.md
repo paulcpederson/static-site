@@ -94,11 +94,12 @@ Now when you build, Static Site will use your custom template engine and build t
 
 ## How
 
-Static Site has four basic building blocks:
+Static Site has five basic building blocks:
 
 - [Front Matter](#front-matter) — data stored at the top of each page
 - [Data Files](#data) — data stored in separate files (Yaml, JSON, JavaScript)
 - [Helpers](#helpers) — helper functions that manipulate the site
+- [Collections](#collections) — grouped pages
 - [Templates](#templates) — templates for rendering page data
 
 ### Front Matter
@@ -233,6 +234,28 @@ module.exports = function (site, cb) {
 ```
 
 Now anything in the `posts` folder will have a `{{next}}` and `{{prev}}` key holding the next or previous post.
+
+### Collections
+
+Because helpers that simply find all the pages with a given path are so common, static-site provides an easier way to group pages called a *collection*. For example, say you were writing an index page for a blog and you wanted to add a list of blog articles. You could write a helper to do this (like above), or you could use a collection:
+
+```
+---
+title: Blog Index
+collections:
+  articles: /blog/*
+---
+```
+
+And in your template, you'll have an array of each page one level deep as `collections.articles` which you can use in your template like:
+
+```
+{% for article in collections.articles %}
+  {{article.title}}
+{% endfor %}
+```
+
+Collections are automatically sorted by the `date` of each page if you've specified one. Otherwise, they'll come back in the order they appear in your file system (alphabetical).
 
 ### Templates
 
