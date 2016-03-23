@@ -7,7 +7,7 @@ function staticSite (options, cb) {
     .then(lib.frontmatter(ctx))
     .then(lib.data(ctx))
     .then(lib.helpers(ctx))
-    .then(lib.collections(ctx))
+    .then(lib.collections)
     .then(lib.template(ctx))
     .then(lib.build(ctx))
     .then(function (pages) {

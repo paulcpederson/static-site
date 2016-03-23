@@ -257,6 +257,8 @@ And in your template, you'll have an array of each page one level deep as `colle
 
 Collections are automatically sorted by the `date` of each page if you've specified one. Otherwise, they'll come back in the order they appear in your file system (alphabetical).
 
+The glob you pass to your collection will simply be checked against each page url with [minimatch](https://github.com/isaacs/minimatch). If minimatch returns true, the page will be added to the collection.
+
 ### Templates
 
 By default, static-site uses [swig](http://paularmstrong.github.io/swig/) templates, but you can use whatever template-engine your heart desires. To use a different template engine, just add the path to your template engine as the `templateEngine` option. The template engine file should be a module that exports a single function. While building each page Static Site will call that function with your site options, the page content, the page's data, and a callback function. For example, to use [jade](http://jade-lang.com/) instead of swig, just use:
