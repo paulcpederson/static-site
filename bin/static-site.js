@@ -2,8 +2,10 @@
 var staticSite = require('../')
 var path = require('path')
 var util = require('util')
+var fs = require('fs')
 var argvParse = require('argv-parse')
 var pkg = require(path.join(__dirname, '..', 'package.json'))
+var context = require('../lib/utils/get-context')
 
 var argv = argvParse({
   'build': {
@@ -33,6 +35,10 @@ var argv = argvParse({
   'verbose': {
     alias: 'v',
     type: 'boolean'
+  },
+  'watch': {
+    alias: 'w',
+    type: 'boolean'
   }
 })
 
@@ -46,6 +52,7 @@ if (argv.help) {
     '  -i, --ignore          Array of paths in source folder to ignore',
     '  -h, --helpers         Array of site helpers to run',
     '  -t, --templateEngine  Template engine to use',
+    '  -w, --watch           Watch file tree for changes and rebuild',
     '  -v, --verbose         Enable verbose logging',
     '  --version             Show version number',
     '  --help                Show help text'
@@ -70,29 +77,49 @@ function indent (message) {
 }
 
 var verbose = argv.verbose
+var watch = argv.watch
+
+delete argv.watch
 delete argv.verbose
 delete argv._
 
-staticSite(argv, function (err, stats) {
-  if (err) {
-    console.error(err)
-    process.exit(1)
-  }
+function buildSite (argv) {
+  staticSite(argv, function (err, stats) {
+    if (err) {
+      console.error(err)
+      if (!watch) {
+        process.exit(1)
+      }
+    }
 
-  if (verbose) {
-    green('Built the following pages:')
-    var buildPath = path.join(process.cwd(), stats.build)
-    stats.pages.forEach(function (page) {
-      page = page.replace(buildPath, '')
-      indent(page)
-    })
-    green('Source Folder:')
-    indent(stats.source)
-    green('Build Folder:')
-    indent(buildPath)
-  }
+    if (verbose) {
+      green('Built the following pages:')
+      var buildPath = path.join(process.cwd(), stats.build)
+      stats.pages.forEach(function (page) {
+        page = page.replace(buildPath, '')
+        indent(page)
+      })
+      green('Source Folder:')
+      indent(stats.source)
+      green('Build Folder:')
+      indent(buildPath)
+    }
 
-  var message = util.format('Built %s files in %sms', stats.pages.length, stats.duration)
-  green(message)
-  process.exit(0)
-})
+    var message = util.format('Built %s files in %sms', stats.pages.length, stats.duration)
+    green(message)
+
+    if (!watch) {
+      process.exit(0)
+    }
+  })
+}
+
+if (watch) {
+  buildSite(argv)
+  var ctx = context(argv)
+  fs.watch(ctx.sourcePath, {recursive: true}, function (event, filename) {
+    buildSite(argv)
+  })
+} else {
+  buildSite(argv)
+}
