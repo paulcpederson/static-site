@@ -1,3 +1,4 @@
+var fs = require('fs')
 var path = require('path')
 var spawn = require('child_process').spawn
 var cli = path.join(__dirname, '..', 'bin', 'static-site.js')
@@ -28,32 +29,29 @@ test('should not exit with the --watch option', function (t) {
   }, 1000)
 })
 
-// test('should rebuild when files change with the --watch option', function (t) {
-//   t.plan(1)
-//   var tmp = 'test/fixtures/watch/source/tmp.html'
-//   rimraf.sync('test/fixtures/watch/build')
-//   rimraf.sync(tmp)
+test('should rebuild when files change with the --watch option', function (t) {
+  t.plan(2)
+  var tmp = 'test/fixtures/watch/source/tmp.html'
+  rimraf.sync('test/fixtures/watch/build')
+  rimraf.sync(tmp)
+  fs.writeFileSync(tmp, '')
 
-//   var bin = spawn(cli, ['-b', options.build, '-s', options.build, '-w'])
-//   fs.writeFileSync(tmp, '')
+  var bin = spawn(cli, ['-b', options.build, '-s', options.source, '-w'])
 
-//   bin.stderr.setEncoding('utf8')
-//   bin.stderr.once('data', function(data) {
-//     assert.strictEqual(data.trim(), '=> changed: ' + src)
-//     fs.unlinkSync(src)
-//     bin.kill()
-//     done()
-//   })
+  bin.stdout.setEncoding('utf8')
+  bin.stdout.once('data', function (data) {
+    t.ok(data.includes('Built 3 files'))
+  })
 
-//   setTimeout(function() {
-//     fs.appendFileSync(src, 'body {}')
-//   }, 500)
+  setTimeout(function () {
+    fs.appendFileSync(tmp, 'OK')
+  }, 500)
 
-//   setTimeout(function () {
-//     t.notOk(exited)
-//     if (!exited) {
-//       bin.kill()
-//     }
-//     rimraf.sync('test/fixtures/watch/build')
-//   }, 500)
-// })
+  setTimeout(function () {
+    var builtTmp = fs.readFileSync('test/fixtures/watch/build/tmp/index.html', 'utf-8')
+    t.equals(builtTmp, 'OK')
+    fs.unlinkSync(tmp)
+    rimraf.sync(options.build)
+    bin.kill()
+  }, 600)
+})
