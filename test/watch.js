@@ -40,7 +40,7 @@ test('should rebuild when files change with the --watch option', function (t) {
 
   bin.stdout.setEncoding('utf8')
   bin.stdout.once('data', function (data) {
-    t.ok(data.includes('Built 3 files'))
+    t.ok(data.indexOf('Built 3 files') > -1)
   })
 
   setTimeout(function () {
