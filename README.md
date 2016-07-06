@@ -46,6 +46,7 @@ Options:
   -h, --helpers         Array of site helpers to run
   -t, --templateEngine  Template engine to use
   -v, --verbose         Enable verbose logging
+  -w, --watch           Watch file tree for changes and rebuild
   --help                Show help
   --version             Show version number
 ```
