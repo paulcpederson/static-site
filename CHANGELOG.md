@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.3.0
+- added file watcher to the CLI (`--watch`)
+
 ## v1.2.0
 - added [collections](https://github.com/paulcpederson/static-site/tree/collections#collections) (#3)
 
