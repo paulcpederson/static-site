@@ -353,9 +353,9 @@ Inside your template you will have access to the front matter of each page, plus
 
 > There are 4 million static site generators out there, why build another one?
 
-Totally valid point. I began by looking through almost every Static Site generator on npm (there are hundreds, but many are undocumented or empty). Most of them are meant for large projects with hundreds of pages. They include a cli that generates scaffolds, a server, a file watcher, and all kinds of other features.
+Totally valid point. I began by looking through almost every Static Site generator on npm (there are hundreds, but many are undocumented or empty). Most of them are meant for large projects with hundreds of pages. They include a cli that generates scaffolds, a server and all kinds of other features.
 
-Static-site doesn't do everything for you. It doesn't have a scaffolding command, or a server, or a cool name. And it probably won't scale up to hundreds of pages. Instead, it just does one thing: take a folder of files and data and turn it into HTML. It's up to you to figure out how to compile your Sass, or bundle JavaScript, or run a development server. It's up to you to watch files and figure out a task runner. Static Site is for developers working on small DIY projects who need a hammer, not a nail gun. I built it to use for my blog, but hopefully it is useful to you.
+Static-site doesn't do everything for you. It doesn't have a scaffolding command, or a server, or a cool name. And it probably won't scale up to hundreds of pages. Instead, it just does one thing: take a folder of files and data and turn it into HTML. It's up to you to figure out how to compile your Sass, or bundle JavaScript, or run a development server. It's up to you to figure out a task runner. Static Site is for developers working on small DIY projects who need a hammer, not a nail gun. I built it to use for my blog, but hopefully it is useful to you.
 
 ## Contributing
 
