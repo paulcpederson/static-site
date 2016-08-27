@@ -44,7 +44,7 @@ test('swig markdown tag', function (t) {
   staticSite(markdownOptions, function (err, stats) {
     t.error(err)
     var file = fs.readFileSync(stats.pages[0], 'utf8')
-    t.ok(file.indexOf('<code class="html"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>') > -1)
+    t.ok(file.indexOf('<span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>') > -1)
     rimraf.sync('test/fixtures/markdown/build')
   })
 })
