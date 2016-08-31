@@ -262,7 +262,7 @@ The glob you pass to your collection will simply be checked against each page ur
 
 ### Templates
 
-By default, static-site uses [swig](http://paularmstrong.github.io/swig/) templates, but you can use whatever template-engine your heart desires. To use a different template engine, just add the path to your template engine as the `templateEngine` option. The template engine file should be a module that exports a single function. While building each page Static Site will call that function with your site options, the page content, the page's data, and a callback function. For example, to use [jade](http://jade-lang.com/) instead of swig, just use:
+By default, static-site uses [swig](http://node-swig.github.io/swig-templates/) templates, but you can use whatever template-engine your heart desires. To use a different template engine, just add the path to your template engine as the `templateEngine` option. The template engine file should be a module that exports a single function. While building each page Static Site will call that function with your site options, the page content, the page's data, and a callback function. For example, to use [jade](http://jade-lang.com/) instead of swig, just use:
 
 ```
 var jade = require('jade')
@@ -278,7 +278,19 @@ Assuming you have that saved to a file named `render.js`, you can now run `stati
 
 #### Using Swig
 
-Static-Site sets up swig partials and templates for you out of the box. Using a specific template on a page is as easy as pointing to it in your front matter:
+You can define a template for a page inside the body of your page, for example:
+
+```
+---
+title: Using native swig syntax for template extension
+---
+{% extends 'templates/post.html' %}
+{% block content %}
+  Yay! this is the content that will go in between the header and the footer.
+{% endblock %}
+```
+
+However, Static-Site also sets up swig partials and templates for you via keys in the frontmatter, so you can also use a specific template on a page by pointing to it in your front matter:
 
 ```
 ---
@@ -303,11 +315,11 @@ Now that page will use the post template, which could look something like this:
 </html>
 ```
 
-In your template, you'll have access to all swig [tags](http://paularmstrong.github.io/swig/docs/tags/) and [filters](http://paularmstrong.github.io/swig/docs/filters/). In addition, the [swig-extras](https://github.com/paularmstrong/swig-extras) library has been added, giving you access to more tags and filters like `{% markdown %}` and `|groupby`. Swig-extras is not documented well, but [the tests](https://github.com/paularmstrong/swig-extras/tree/master/tests) show example usage of these additional tags and filters.
+In your template, you'll have access to all swig [tags](http://node-swig.github.io/swig-templates/docs/tags/) and [filters](http://node-swig.github.io/swig-templates/docs/filters/). In addition, the [swig-extras](https://github.com/paularmstrong/swig-extras) library has been added, giving you access to more tags and filters like `{% markdown %}` and `|groupby`. Swig-extras is not documented well, but [the tests](https://github.com/paularmstrong/swig-extras/tree/master/tests) show example usage of these additional tags and filters.
 
 By default, the content of the page will be inserted into the content block in the template. You can set the block name with the `block` key in your frontmatter to change the block the content will be rendered to. For example using `block: post` will instert the content into the `post` block in whatever template you are using. This is useful for layouts which extend a main layout (below).
 
-Templates can [extend other templates](http://paularmstrong.github.io/swig/docs/#inheritance) and [include partials](http://paularmstrong.github.io/swig/docs/tags/#include), so you could have a main layout template you use for every page, and a dedicated post template which extends the main layout.
+Templates can [extend other templates](http://node-swig.github.io/swig-templates/docs/#inheritance) and [include partials](http://node-swig.github.io/swig-templates/docs/tags/#include), so you could have a main layout template you use for every page, and a dedicated post template which extends the main layout.
 
 > `_templates/main.html`
 

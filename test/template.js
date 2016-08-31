@@ -34,6 +34,21 @@ test('swig layouts and partials', function (t) {
   })
 })
 
+test('swig block disable', function (t) {
+  var blockOptions = {
+    source: 'test/fixtures/no-block/source',
+    build: 'test/fixtures/no-block/build'
+  }
+  rimraf.sync('test/fixtures/no-block/build')
+  t.plan(2)
+  staticSite(blockOptions, function (err, stats) {
+    t.error(err)
+    var file = fs.readFileSync(stats.pages[0], 'utf8')
+    t.equals(file, 'side-aftercontent-after')
+    rimraf.sync('test/fixtures/template/build')
+  })
+})
+
 test('swig markdown tag', function (t) {
   rimraf.sync('test/fixtures/markdown/build')
   var markdownOptions = {
