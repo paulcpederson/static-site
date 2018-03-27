@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## v1.3.2
 - use `swig-templates` instead of `swig` (#9)
+- update all dependencies
 
 ## v1.3.1
 - update all dependencies to latest

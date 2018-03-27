@@ -7,11 +7,11 @@
     "url": "https://github.com/paulcpederson/static-site/issues"
   },
   "devDependencies": {
-    "rimraf": "^2.5.1",
-    "shelljs": "^0.6.0",
+    "rimraf": "^2.6.2",
+    "shelljs": "^0.6.1",
     "standard": "^6.0.4",
     "tap-spec": "^4.1.1",
-    "tape": "^4.4.0"
+    "tape": "^4.9.0"
   },
   "homepage": "https://github.com/paulcpederson/static-site",
   "keywords": [
@@ -32,14 +32,14 @@
   },
   "dependencies": {
     "argv-parse": "^1.0.1",
-    "es6-promise": "^3.2.1",
-    "glob": "^7.0.6",
-    "gray-matter": "^2.0.2",
-    "highlight.js": "^9.6.0",
+    "es6-promise": "^3.3.1",
+    "glob": "^7.1.2",
+    "gray-matter": "^2.1.1",
+    "highlight.js": "^9.12.0",
     "markdown-it": "^7.0.1",
-    "minimatch": "^3.0.3",
+    "minimatch": "^3.0.4",
     "mkdirp": "^0.5.1",
-    "object-assign": "^4.1.0",
+    "object-assign": "^4.1.1",
     "read-data": "^0.3.0",
     "swig-extras": "0.0.1",
     "swig-templates": "^2.0.2"
