@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.3.3
+- fix custom template engine options reference (#10)
+
 ## v1.3.2
 - use `swig-templates` instead of `swig` (#9)
 - update all dependencies
