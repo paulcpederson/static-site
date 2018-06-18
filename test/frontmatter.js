@@ -45,11 +45,29 @@ test('pretty urls can be turned off', function (t) {
     build: 'test/fixtures/prettyUrl/build'
   }
   rimraf.sync('test/fixtures/prettyUrl/build')
-  t.plan(3)
+  t.plan(4)
   staticSite(options, function (err, stats) {
     t.error(err)
     t.equal(stats.pages[0], path.join(process.cwd(), 'test/fixtures/prettyUrl/build/not-pretty.html'))
-    t.equal(stats.pages[1], path.join(process.cwd(), 'test/fixtures/prettyUrl/build/pretty/index.html'))
+    t.equal(stats.pages[1], path.join(process.cwd(), 'test/fixtures/prettyUrl/build/pretty-override/index.html'))
+    t.equal(stats.pages[2], path.join(process.cwd(), 'test/fixtures/prettyUrl/build/pretty/index.html'))
+    rimraf.sync('test/fixtures/prettyUrl/build')
+  })
+})
+
+test('pretty urls can be turned off with option', function (t) {
+  var options = {
+    source: 'test/fixtures/prettyUrl/source',
+    build: 'test/fixtures/prettyUrl/build',
+    prettyUrl: false
+  }
+  rimraf.sync('test/fixtures/prettyUrl/build')
+  t.plan(4)
+  staticSite(options, function (err, stats) {
+    t.error(err)
+    t.equal(stats.pages[0], path.join(process.cwd(), 'test/fixtures/prettyUrl/build/not-pretty.html'))
+    t.equal(stats.pages[1], path.join(process.cwd(), 'test/fixtures/prettyUrl/build/pretty-override/index.html'))
+    t.equal(stats.pages[2], path.join(process.cwd(), 'test/fixtures/prettyUrl/build/pretty.html'))
     rimraf.sync('test/fixtures/prettyUrl/build')
   })
 })

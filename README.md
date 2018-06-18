@@ -122,6 +122,8 @@ Static Site uses [gray-matter](https://www.npmjs.com/package/gray-matter) for pa
 
 Static Site creates pretty urls automatically. For example, if you have a file called `about.html` it will be built to `about/index.html`. This means you can link to `/about/` which is a better url for a human being. If you'd like to turn this off for a particular page, just set `prettyUrl` to `false` in the page's frontmatter.
 
+If you don't want pretty urls at all, you can set `prettyUrl` to `false` in the main options, or pass `--prettyUrl false` as an additional command line argument.
+
 ### Data
 
 JSON, YML, and JavaScript are all valid data formats. Say you have a file named `posts.json` in a folder called `data`. To add that data to a page, just add the path to the file:
