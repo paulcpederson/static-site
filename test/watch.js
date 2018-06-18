@@ -48,7 +48,7 @@ test('should rebuild when files change with the --watch option', function (t) {
   }, 500)
 
   setTimeout(function () {
-    var builtTmp = fs.readFileSync('test/fixtures/watch/build/tmp/index.html', 'utf-8')
+    var builtTmp = fs.readFileSync(path.join(process.cwd(), options.build, '/tmp/index.html'), 'utf-8')
     t.equals(builtTmp, 'OK')
     bin.kill()
     rimraf.sync(options.build)
