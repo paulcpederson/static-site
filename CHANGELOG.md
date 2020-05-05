@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.3.5
+- update dependencies
+
 ## v1.3.4
 - allow `prettyUrl` to be disabled from helper (#11)
 

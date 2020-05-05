@@ -1,7 +1,7 @@
 {
   "name": "static-site",
   "description": "A simple static site generator",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "author": "Paul C Pederson <paul.c.pederson@gmail.com>",
   "bugs": {
     "url": "https://github.com/paulcpederson/static-site/issues"
@@ -10,7 +10,7 @@
     "rimraf": "^2.6.2",
     "shelljs": "^0.6.1",
     "standard": "^6.0.4",
-    "tap-spec": "^4.1.1",
+    "tap-spec": "^5.0.0",
     "tape": "^4.9.0"
   },
   "homepage": "https://github.com/paulcpederson/static-site",
@@ -35,13 +35,13 @@
     "es6-promise": "^3.3.1",
     "glob": "^7.1.2",
     "gray-matter": "^2.1.1",
-    "highlight.js": "^9.12.0",
+    "highlight.js": "^10.0.2",
     "markdown-it": "^7.0.1",
     "minimatch": "^3.0.4",
     "mkdirp": "^0.5.1",
     "object-assign": "^4.1.1",
     "read-data": "^0.3.0",
     "swig-extras": "0.0.1",
-    "swig-templates": "^2.0.2"
+    "swig-templates": "^2.0.3"
   }
 }
