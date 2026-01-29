@@ -1,17 +1,16 @@
 {
   "name": "static-site",
   "description": "A simple static site generator",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "author": "Paul C Pederson <paul.c.pederson@gmail.com>",
   "bugs": {
     "url": "https://github.com/paulcpederson/static-site/issues"
   },
   "devDependencies": {
-    "rimraf": "^2.6.2",
-    "shelljs": "^0.6.1",
-    "standard": "^6.0.4",
+    "rimraf": "^6.1.2",
+    "shelljs": "^0.10.0",
     "tap-spec": "^5.0.0",
-    "tape": "^4.9.0"
+    "tape": "^5.9.0"
   },
   "homepage": "https://github.com/paulcpederson/static-site",
   "keywords": [
@@ -28,20 +27,18 @@
     "url": "https://github.com/paulcpederson/static-site.git"
   },
   "scripts": {
-    "test": "standard && tape 'test/**/*.js' | tap-spec"
+    "test": "tape 'test/**/*.js' | tap-spec"
   },
   "dependencies": {
     "argv-parse": "^1.0.1",
-    "es6-promise": "^3.3.1",
-    "glob": "^7.1.2",
-    "gray-matter": "^2.1.1",
-    "highlight.js": "^10.0.2",
-    "markdown-it": "^7.0.1",
-    "minimatch": "^3.0.4",
-    "mkdirp": "^0.5.1",
-    "object-assign": "^4.1.1",
-    "read-data": "^0.3.0",
-    "swig-extras": "0.0.1",
-    "swig-templates": "^2.0.3"
+    "free-swig": "^1.5.5",
+    "glob": "^13.0.0",
+    "gray-matter": "^4.0.3",
+    "highlight.js": "^11.11.1",
+    "markdown-it": "^14.1.0",
+    "minimatch": "^10.1.1",
+    "mkdirp": "^3.0.1",
+    "read-data": "^1.1.0",
+    "swig-extras": "0.0.1"
   }
 }

@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.3.6
+- update dependencies
+- remove deprecated dependencies
+- move to free-swig
+
 ## v1.3.5
 - update dependencies
 

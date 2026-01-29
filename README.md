@@ -264,7 +264,7 @@ The glob you pass to your collection will simply be checked against each page ur
 
 ### Templates
 
-By default, static-site uses [swig](http://node-swig.github.io/swig-templates/) templates, but you can use whatever template-engine your heart desires. To use a different template engine, just add the path to your template engine as the `templateEngine` option. The template engine file should be a module that exports a single function. While building each page Static Site will call that function with your site options, the page content, the page's data, and a callback function. For example, to use [jade](http://jade-lang.com/) instead of swig, just use:
+By default, static-site uses [swig](https://www.npmjs.com/package/free-swig) templates, but you can use whatever template-engine your heart desires. To use a different template engine, just add the path to your template engine as the `templateEngine` option. The template engine file should be a module that exports a single function. While building each page Static Site will call that function with your site options, the page content, the page's data, and a callback function. For example, to use [jade](http://jade-lang.com/) instead of swig, just use:
 
 ```
 var jade = require('jade')
