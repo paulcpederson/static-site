@@ -19,12 +19,14 @@
     "site",
     "static"
   ],
-  "bin": "bin/static-site.js",
+  "bin": {
+    "static-site": "bin/static-site.js"
+  },
   "license": "ISC",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/paulcpederson/static-site.git"
+    "url": "git+https://github.com/paulcpederson/static-site.git"
   },
   "scripts": {
     "test": "tape 'test/**/*.js' | tap-spec"
